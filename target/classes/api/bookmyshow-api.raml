@@ -1,0 +1,86 @@
+#%RAML 1.0
+title: bookMyShow API
+
+
+traits:
+  client-id-required:
+    headers:
+      client_id:
+        type: string
+      client_secret:
+        type: string
+    responses:
+      401:
+        description: Unauthorized, The client_id or client_secret are not valid or the client does not have access
+      429:
+        description: The client used all of it's request quota for the current period.
+
+/allmovies:
+  is: [client-id-required]
+
+  get:
+    description: to search the entire catalog of theaters & available movies
+
+    queryParameters:
+      city:
+        required: true
+        enum:
+          - DEL
+          - MUM
+          - HYD
+    responses:
+      200:
+        body:
+          application/json:
+            examples:
+                  output:  !include examples/getAllMovies.raml 
+      555:
+        body:
+          application/json:
+            example:
+              message: "Invalid city name..please enter one from the following.. DEL,MUM,HYD"
+
+/theatres:
+  is: [client-id-required]
+  get:
+    description: to get the theatre list
+    queryParameters:
+      movieName:
+        required: true
+      city:
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            examples:
+              output: 
+
+/bookmyticket:
+  is: [client-id-required]  
+  post:
+    description: this method will be used to book the ticket
+    body:
+      application/json:
+        examples:
+          input: !include examples/bookMyTicket.raml
+    responses:
+      201:
+        description: Ticket booked successfully.
+        body:
+          application/json:
+            example:
+              message: "Your seats are reserved. Thank you for booking with us" 
+      400:
+        description: Invalid input
+        body:
+          application/json:
+            example:
+              message: "Invalid JSON input"
+
+
+          
+
+
+
+

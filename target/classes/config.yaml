@@ -1,0 +1,15 @@
+bookTicket:
+  wsdl: "api\bookShowTicket.wsdl"
+  service: "bookTicket"
+  port: "bookTicketSOAP"
+  address: "http://localhost:8081/bookTicket/bookTicketSOAP"
+  
+database:
+  host: "localhost"
+  port: "3306"
+  user: "root"
+  password: "rootpassword"
+  db: "apisero_bms_mule"
+  
+http:
+  port: "8081"

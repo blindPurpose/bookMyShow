@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="movieTicket" format="json">
+      <types:shape format="weave" example="examples/book_ticket-2.json"><![CDATA[%dw 2.0
+
+type movieTicket = {|
+  numberOfSeats: Number {"typeId": "int"}, 
+  Movie: String, 
+  Theatre: String, 
+  region: String
+|} {"example": "{\\\"numberOfSeats\\\":10,\\\"Movie\\\":\\\"Movie1\\\",\\\"Theatre\\\":\\\"Theatre1\\\",\\\"region\\\":\\\"DEL\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#78dae9fa-4c55-4d84-a0c5-e63d9fd768ba">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="movieTicket"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#89d2a038-171e-4cb9-9dba-b6c96ee4c960">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="movieTicket"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

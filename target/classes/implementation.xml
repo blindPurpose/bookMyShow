@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="getAllMoviesFlow" doc:id="5b3547c3-f9d7-4333-a866-0f758065aedb" >
+		<db:select doc:name="Select" doc:id="16853042-54e0-4321-85c5-3e1d06581d3c" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from movie where region_name = :city]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{city : attributes.queryParams.city}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="CSV to JSON" doc:id="5e6a208f-c34b-4864-ae60-6bf6f76d7791" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getTheatresFlow" doc:id="49189da4-7907-4342-8412-ff417ec6448f" >
+		<db:select doc:name="Select" doc:id="933fedd7-e826-444b-b936-fa25c70a5685" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from theatre where region = :city and movie_name = :movieName]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{city : attributes.queryParams.city , movieName : attributes.queryParams.movieName}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="CSV to JSON" doc:id="d44e0d92-9662-4c4f-84fd-40fa12bd88cc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="bookTicketFlow" doc:id="00dc80f9-d48e-40d0-a8d7-9281b5f5d23c" >
+		<db:select doc:name="Select" doc:id="c17a4b9f-462b-49cc-8996-0a3f02943712" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from movie]]></db:sql>
+		</db:select>
+	</flow>
+</mule>
